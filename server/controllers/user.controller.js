@@ -2,6 +2,8 @@ import User from "../models/user.model.js";
 import AppError from "../utils/error.util.js";
 import cloudinary from "cloudinary";
 import fs from "fs/promises";
+import sendEmail from "../utils/sendEmail.js";
+import crypto from "crypto";
 
 const cookieOptions= {
     maxAge:7*24*60*60*1000,  //7 days
@@ -141,6 +143,48 @@ const getPrfile=async (req,res,next) =>{
     }catch(e){
         return next(new AppError('Failed to fetch profile details', 500));
     }
+}
+// forgot password:-
+const forgotPassword = async (req, res, next) => {
+    const { email } = req.body;
+  
+    if (!email) {
+      return next(new AppError("Email not registered", 400));
+    }
+  
+    const user = await User.findOne({ email });
+    if (!user) {
+      return next(new AppError("Email not registered", 400));
+    }
+  
+    const resetToken = user.generatePasswordResetToken();
+  
+    await user.save();
+    // console.log('Generated Reset Token:', resetToken);
+  
+    const resetPasswordUrl = `${process.env.FRONTEND_URL}/reset/${resetToken}`;
+    console.log("ResetPassword-Url->", resetPasswordUrl);
+  
+    // send email
+    const subject = "Reset Password";
+    const message = `You can reset your passsword by clicking <a href=${resetPasswordUrl} target="_blank">Reset your password<a/>\nIf the above link does not work for some reason then copy paste this link in new tab ${resetPasswordUrl}.\n if you have not requested this , kindly ignore.`;
+  
+    try {
+      await sendEmail(email, subject, message);
+      res.status(200).json({
+        success: true,
+        message: `Reset password token has been sent to ${email} successfully`,
+      });
+    } catch (e) {
+      user.forgotPasswordExpiry = undefined;
+      user.forgotPasswordToken = undefined;
+  
+      await user.save();
+      return next(new AppError(e.message, 500));
+    }
+  };
+  
+const resetPassword = () => {
 
 }
 
@@ -148,5 +192,7 @@ export {
     register,
     login,
     logout,
-    getPrfile
+    getPrfile,
+    forgotPassword,
+    resetPassword
 }
