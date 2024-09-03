@@ -130,7 +130,7 @@ const logout=(req,res) =>{
     });
 };
 
-const getPrfile=async (req,res,next) =>{
+const getProfile=async (req,res,next) =>{
     try{
         const userId = req.user.id;
         const user= await User.findById(userId);
@@ -265,63 +265,122 @@ const forgotPassword = async (req, res, next) => {
 
 
 
-//   updateUser
-  const updateUser = async (req, res, next) => {
-    const { fullName } = req.body;
-    const { id } = req.user.id;
+//   updateUser 
+
+//   const updateUser = async (req, res, next) => {
+//     const { fullName } = req.body;
+//     const { id } = req.user.id;
   
-    const user = await User.findById(id);
+//     const user = await User.findById(id);
   
-    if (!user) {
-      return next(new AppError("User does not exist", 400));
-    }
+//     if (!user) {
+//       return next(new AppError("User does not exist", 400));
+//     }
   
-    if (req.fullName) {
-      user.fullName = fullName;
-    }
+//     if (req.fullName) {
+//       user.fullName = fullName;
+//     }
   
-    if (req.file) {
-      await cloudinary.v2.uploader.destroy(user.avatar.public_id);
+//     if (req.file) {
+//       await cloudinary.v2.uploader.destroy(user.avatar.public_id);
   
-      try {
-        const result = await cloudinary.v2.uploader.upload(req.file.path, {
-          folder: "EduSphere",
-          width: 450,
-          height: 450,
-          gravity: "faces",
-          crop: "fill",
-        });
+//       try {
+//         const result = await cloudinary.v2.uploader.upload(req.file.path, {
+//           folder: "EduSphere",
+//           width: 450,
+//           height: 450,
+//           gravity: "faces",
+//           crop: "fill",
+//         });
   
-        if (result) {
-          user.avatar.public_id = result.public_id;
-          user.avatar.secure_url = result.secure_url;
+//         if (result) {
+//           user.avatar.public_id = result.public_id;
+//           user.avatar.secure_url = result.secure_url;
   
-          // Remove file from server
-          fs.rm(`uploads/${req.file.filename}`);
+//           // Remove file from server
+//           fs.rm(`uploads/${req.file.filename}`);
+//         }
+//       } catch (e) {
+//         return next(
+//           new AppError(error || "File not uploaded, please try again", 500)
+//         );
+//       }
+//     }
+  
+//     await user.save();
+  
+//     res.status(200).json({
+//       success: true,
+//       message: "User details updated successfully!",
+//     });
+//   };
+
+
+
+// Updated User 
+const updateUser = async (req, res, next) => {
+    try {
+        const { fullName } = req.body;
+        const { id } = req.user; // Destructure `id` directly from `req.user`
+
+        const user = await User.findById(id);
+
+        if (!user) {
+            return next(new AppError("User does not exist", 400));
         }
-      } catch (e) {
-        return next(
-          new AppError(error || "File not uploaded, please try again", 500)
-        );
-      }
+
+        if (fullName) {
+            user.fullName = fullName;
+        }
+
+        if (req.file) {
+            // Delete the old avatar from Cloudinary
+            await cloudinary.v2.uploader.destroy(user.avatar.public_id);
+
+            try {
+                const result = await cloudinary.v2.uploader.upload(req.file.path, {
+                    folder: "EduSphere",
+                    width: 450,
+                    height: 450,
+                    gravity: "faces",
+                    crop: "fill",
+                });
+
+                if (result) {
+                    user.avatar.public_id = result.public_id;
+                    user.avatar.secure_url = result.secure_url;
+
+                    // Remove the uploaded file from the server
+                    await fs.rm(`uploads/${req.file.filename}`);
+                }
+            } catch (error) {
+                return next(new AppError(error.message || "File not uploaded, please try again", 500));
+            }
+        }
+
+        await user.save();
+
+        res.status(200).json({
+            success: true,
+            message: "User details updated successfully!",
+        });
+    } catch (e) {
+        return next(new AppError(e.message, 500));
     }
-  
-    await user.save();
-  
-    res.status(200).json({
-      success: true,
-      message: "User details updated successfully!",
-    });
-  };
+};
 
   
 export {
     register,
     login,
     logout,
-    getPrfile,
+    getProfile,
     forgotPassword,
     resetPassword,
     changePassword,
     updateUser
 }
+
+
+
+
