@@ -183,11 +183,55 @@ const forgotPassword = async (req, res, next) => {
       return next(new AppError(e.message, 500));
     }
   };
+
+
+// Reset password
+  const resetPassword = async (req, res, next) => {
+    try {
+      const { resetToken } = req.params;  
+      const { password } = req.body;
+      console.log("Received password reset request:", { resetToken, password });
+
   
-const resetPassword = () => {
+      // const forgotPasswordToken=crypto
+      // .createHash('sha256')
+      // .update(resetToken)
+      // .digest('hex');
+  
+      const hashedToken = crypto
+        .createHash("sha256")
+        .update(resetToken)
+        .digest("hex");
+      // console.log('Hashed Token:', hashedToken);
+  
+      const user = await User.findOne({
+        forgotPasswordToken: hashedToken,
+        forgotPasswordExpiry: { $gt: Date.now() },
+      });
+  
+      // if user doent not found
+      if (!user) {
+        return next(
+          new AppError("Token is invalid or expired, please try again", 400)
+        );
+      }
+      // incase if user found
+      user.password = password;
+      user.forgotPasswordToken = undefined;
+      user.forgotPasswordExpiry = undefined;
+      user.save();
+  
+      res.status(200).json({
+        success: true,
+        message: "Password changed successfully!",
+      });
+    } catch (e) {
+      return next(new AppError(e.message, 500));
+    }
+  };
+  
 
-}
-
+  
 export {
     register,
     login,
