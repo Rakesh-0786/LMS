@@ -3,7 +3,7 @@ import Course from "../models/course.model.js";
 import fs from "fs/promises";
 import cloudinary from "cloudinary";
 
-//  Store courses
+//  dummy as Store courses
 const storeCourses = async (req, res, next) => {
   const {
     title,
@@ -96,6 +96,7 @@ const getLecturesByCourseId = async function (req, res, next) {
   }
 };
 
+
 const createCourse = async (req, res, next) => {
   try {
     const { title, description, category, createdBy } = req.body;
@@ -144,6 +145,8 @@ const createCourse = async (req, res, next) => {
   }
 };
 
+
+
 const updateCourse = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -171,6 +174,8 @@ const updateCourse = async (req, res, next) => {
   }
 };
 
+
+
 const removeCourse = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -190,6 +195,8 @@ const removeCourse = async (req, res, next) => {
     return next(new AppError(e.message, 500));
   }
 };
+
+
 
 const addLectureToCourseById = async (req, res, next) => {
   try {
@@ -248,45 +255,89 @@ const addLectureToCourseById = async (req, res, next) => {
 
 // deleting lecture from course 
 
+// const deleteLectureFromCourseById = async (req, res, next) => {
+//   const { courseId, lectureId } = req.params;
+
+//   try {
+//     const course = await Course.findById(courseId);
+
+//     if (!course) {
+//       return next(new AppError('Course with given id does not exist', 500));
+//     }
+
+//     const lectureIndex = course.lectures.findIndex(
+//       (lecture) => lecture._id.toString() === lectureId
+//     );
+
+//     if (lectureIndex === -1) {
+//       return next(new AppError('Lecture with given id does not exist', 500));
+//     }
+
+//     const lecture = course.lectures[lectureIndex];
+
+//     if (lecture.lecture && lecture.lecture.public_id) {
+//       await cloudinary.v2.uploader.destroy(lecture.lecture.public_id);
+//     }
+
+//     course.lectures.splice(lectureIndex, 1);
+//     course.numberOfLectures = course.lectures.length;
+//     await course.save();
+
+//     res.status(200).json({
+//       success: true,
+//       message: 'Lecture successfully deleted from the course',
+//       course
+//     });
+
+//   } catch (error) {
+//     return next(new AppError(error.message, 500));
+//   }
+// };
+
 const deleteLectureFromCourseById = async (req, res, next) => {
-  const { courseId, lectureId } = req.params;
-
-  try {
-    const course = await Course.findById(courseId);
-
-    if (!course) {
-      return next(new AppError('Course with given id does not exist', 500));
+    const { courseId, lectureId } = req.params;
+  
+    console.log('Delete Lecture Route Hit:', { courseId, lectureId });
+  
+    try {
+      const course = await Course.findById(courseId);
+  
+      if (!course) {
+        console.log('Course not found:', courseId);
+        return next(new AppError('Course with given id does not exist', 500));
+      }
+  
+      const lectureIndex = course.lectures.findIndex(
+        (lecture) => lecture._id.toString() === lectureId
+      );
+  
+      if (lectureIndex === -1) {
+        console.log('Lecture not found:', lectureId);
+        return next(new AppError('Lecture with given id does not exist', 500));
+      }
+  
+      const lecture = course.lectures[lectureIndex];
+  
+      if (lecture.lecture && lecture.lecture.public_id) {
+        await cloudinary.v2.uploader.destroy(lecture.lecture.public_id);
+      }
+  
+      course.lectures.splice(lectureIndex, 1);
+      course.numberOfLectures = course.lectures.length;
+      await course.save();
+  
+      res.status(200).json({
+        success: true,
+        message: 'Lecture successfully deleted from the course',
+        course
+      });
+  
+    } catch (error) {
+      console.error('Error deleting lecture:', error.message);
+      return next(new AppError(error.message, 500));
     }
-
-    const lectureIndex = course.lectures.findIndex(
-      (lecture) => lecture._id.toString() === lectureId
-    );
-
-    if (lectureIndex === -1) {
-      return next(new AppError('Lecture with given id does not exist', 500));
-    }
-
-    const lecture = course.lectures[lectureIndex];
-
-    if (lecture.lecture && lecture.lecture.public_id) {
-      await cloudinary.v2.uploader.destroy(lecture.lecture.public_id);
-    }
-
-    course.lectures.splice(lectureIndex, 1);
-    course.numberOfLectures = course.lectures.length;
-    await course.save();
-
-    res.status(200).json({
-      success: true,
-      message: 'Lecture successfully deleted from the course',
-      course
-    });
-
-  } catch (error) {
-    return next(new AppError(error.message, 500));
-  }
-};
-
+  };
+  
 
 export {
   storeCourses,

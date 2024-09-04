@@ -45,11 +45,17 @@ router
       removeCourse
     )
 
-//   .post(isLoggedIn, authorizedRoles('ADMIN'), upload.single('lecture'), addLectureToCourseById);
+  .post(
+    isLoggedIn,
+    authorizedRoles('ADMIN'),
+    upload.single('lecture'), 
+    addLectureToCourseById
+)
+
 
 // Route for deleting a lecture
-// router
-//   .route("/:courseId/lecture/:lectureId")
-//   .delete(isLoggedIn, authorizedRoles("ADMIN"), deleteLectureFromCourseById);
+router
+  .route("/:courseId/lecture/:lectureId")
+  .delete(isLoggedIn, authorizedRoles("ADMIN"), deleteLectureFromCourseById);
 
 export default router;
