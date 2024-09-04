@@ -23,8 +23,8 @@ router
   .route("/")
   .get(getAllCourses)
   .post(
-    // isLoggedIn,
-    // authorizedRoles("ADMIN"),
+    isLoggedIn,
+    authorizedRoles("ADMIN"),
     upload.single("thumbnail"),
     createCourse
   );
@@ -33,11 +33,17 @@ router
 router
   .route("/:id")
   .get( isLoggedIn, getLecturesByCourseId)
-//   .put(isLoggedIn, authorizedRoles("ADMIN"), updateCourse)
-  .put( updateCourse)
+  .put(
+    isLoggedIn,
+    authorizedRoles("ADMIN"),
+    updateCourse
+)
 
-//   .delete(isLoggedIn, authorizedRoles("ADMIN"), removeCourse)
-.delete( removeCourse)
+  .delete(
+    isLoggedIn,
+     authorizedRoles("ADMIN"),
+      removeCourse
+    )
 
 //   .post(isLoggedIn, authorizedRoles('ADMIN'), upload.single('lecture'), addLectureToCourseById);
 
