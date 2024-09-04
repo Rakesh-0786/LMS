@@ -33,7 +33,9 @@ router
 router
   .route("/:id")
   .get( isLoggedIn, getLecturesByCourseId)
-  .put(isLoggedIn, authorizedRoles("ADMIN"), updateCourse)
+//   .put(isLoggedIn, authorizedRoles("ADMIN"), updateCourse)
+  .put( updateCourse)
+
   .delete(isLoggedIn, authorizedRoles("ADMIN"), removeCourse)
 //   .post(isLoggedIn, authorizedRoles('ADMIN'), upload.single('lecture'), addLectureToCourseById);
 
