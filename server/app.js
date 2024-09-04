@@ -4,6 +4,7 @@ import cookieParser from 'cookie-parser';
 import {config} from "dotenv";
 import morgan from 'morgan';
 import userRoutes from "./routes/user.routes.js";
+import courseRoutes from "./routes/course.routes.js";
 import errorMiddleware from './middlewares/error.middleware.js';
 import dotenv from "dotenv";
 
@@ -30,6 +31,7 @@ app.use('/ping', (req,res) =>{
 
 // define the path for  user rautes 
 app.use('/api/v1/user', userRoutes)
+app.use('/api/v1/courses',courseRoutes);
 
 
 app.all('*',(req,res) =>{
