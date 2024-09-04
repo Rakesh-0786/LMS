@@ -7,14 +7,12 @@ import {
   removeCourse,
   storeCourses,
   updateCourse,
-  deleteLectureFromCourseById // Added import for deleteLecture function
+  deleteLectureFromCourseById,
 } from "../controllers/course.controller.js";
-// import isLoggedIn, { authorizeSubscribers } from "../middlewares/auth.middleware.js";
 import upload from "../middlewares/multer.middleware.js";
 import isLoggedIn from "../middlewares/auth.middleware.js";
 import authorizedRoles from "../middlewares/Authorize.middleware.js";
-// import authorizedRoles from "../middlewares/Authorize.middleware.js";
-
+import authorizeSubscriber from "../middlewares/AuthorizeSubscriber.middleware.js";
 const router = Router();
 
 router.route("/s").post(storeCourses);
@@ -32,26 +30,17 @@ router
 // if the user is loggedin then that user can see the lectures
 router
   .route("/:id")
-  .get( isLoggedIn, getLecturesByCourseId)
-  .put(
-    isLoggedIn,
-    authorizedRoles("ADMIN"),
-    updateCourse
-)
+  .get(isLoggedIn, authorizeSubscriber, getLecturesByCourseId)
+  .put(isLoggedIn, authorizedRoles("ADMIN"), updateCourse)
 
-  .delete(
-    isLoggedIn,
-     authorizedRoles("ADMIN"),
-      removeCourse
-    )
+  .delete(isLoggedIn, authorizedRoles("ADMIN"), removeCourse)
 
   .post(
     isLoggedIn,
-    authorizedRoles('ADMIN'),
-    upload.single('lecture'), 
+    authorizedRoles("ADMIN"),
+    upload.single("lecture"),
     addLectureToCourseById
-)
-
+  );
 
 // Route for deleting a lecture
 router

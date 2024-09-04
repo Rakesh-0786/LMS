@@ -14,4 +14,6 @@ const authorizedRoles=(...roles) => async (req,res,next) => {
     next();
 }
 
+
+
 export default authorizedRoles;
