@@ -36,7 +36,9 @@ router
 //   .put(isLoggedIn, authorizedRoles("ADMIN"), updateCourse)
   .put( updateCourse)
 
-  .delete(isLoggedIn, authorizedRoles("ADMIN"), removeCourse)
+//   .delete(isLoggedIn, authorizedRoles("ADMIN"), removeCourse)
+.delete( removeCourse)
+
 //   .post(isLoggedIn, authorizedRoles('ADMIN'), upload.single('lecture'), addLectureToCourseById);
 
 // Route for deleting a lecture
