@@ -1,2 +1,2 @@
-EduSphere Frontend
+EduSphere 
 

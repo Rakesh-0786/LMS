@@ -1,10 +1,15 @@
 import './App.css'
+import { Routes } from 'react-router-dom'
 
 function App() {
 
   return (
     <>
-    EduSphere
+        EduSphere
+
+    <Routes>
+      {/* <Route path='/' element={<Home />}></Route> */}
+    </Routes>
     </>
   )
 }
