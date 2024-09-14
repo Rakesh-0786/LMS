@@ -1,17 +1,14 @@
 import './App.css'
-import { Routes } from 'react-router-dom'
-import Footer from './components/Footer'
+import { Route, Routes } from 'react-router-dom'
+import HomePage from './Pages/HomePage'
 
 function App() {
 
   return (
     <>
-        {/* EduSphere
- */}
-    {/* <Routes> */}
-      {/* <Route path='/' element={<Home />}></Route> */}
-    {/* </Routes> */}
-    <Footer />
+    <Routes>
+      <Route path='/' element={<HomePage />}></Route>
+    </Routes>
     </>
   )
 }
