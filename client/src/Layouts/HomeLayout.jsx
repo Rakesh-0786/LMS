@@ -1,10 +1,17 @@
 import React from "react";
 import { FiMenu } from "react-icons/fi";
+import {useDispatch,useSelector} from 'react-redux'
 import { AiFillCloseCircle } from "react-icons/ai";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
 
 function HomeLayout({ children }) {
+
+    const dispatch=useDispatch();
+    const naviagte=useNavigate();
+
+    // for checking if user is logged in
+    const isLoggedIn=useSelector((state) => state?.auth?.isLoggedIn);
 
     function changeWidth() {
         const drawerSide = document.getElementsByClassName("drawer-side");
@@ -34,7 +41,8 @@ function HomeLayout({ children }) {
                         <FiMenu
                             onClick={changeWidth}
                             size={"32px"}
-                            className="font-bold text-white m-4 absolute top-0 left-0"
+                            // className="font-bold text-white m-4 absolute top-0 left-0"
+                            className="font-bold text-white m-4 absolute top-0 left-0 hover:text-gray-300 hover:scale-110 transition duration-300"
                         />
                     </label>
                 </div>

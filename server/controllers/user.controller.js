@@ -61,7 +61,7 @@ const register= async (req,res,next) =>{
             user.avatar.secure_url=result.secure_url;
 
             // Remove file from server
-            fs.rm(`uploads/${req.file.filename}`)
+            // fs.rm(`uploads/${req.file.filename}`)
         }
     } catch(e) {
          return next (
