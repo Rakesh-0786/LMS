@@ -85,13 +85,13 @@ function HomeLayout({ children }) {
                         {!isLoggedIn && (
                             <li className="absolute bottom-4 w-[90%]">
                             <div className="w-full flex items-center justify-center">
-                                <button className="btn-primary px-4 py-1 font-semibold rounded-md w-full bg-blue-800" >
+                                <button className="btn-primary px-4 py-1 font-semibold rounded-md w-full bg-blue-800 hover:bg-blue-600 transition-all" >
                                 {/* style={{ backgroundColor: '#007BFF' }} */}
                                 
                                 <Link to='/login'>Login</Link>
                                 </button>
-                                <button className="btn-secondary px-4 py-1 font-semibond rounded-md w-full bg-yellow-600">
-                                <Link to='/login'>Signup</Link>
+                                <button className="btn-secondary px-4 py-1 font-semibond rounded-md w-full bg-yellow-600 hover:bg-yellow-500 transition-all ml-2">
+                                <Link to='/signup'>Signup</Link>
                                 </button>
                             </div>
                             </li>
