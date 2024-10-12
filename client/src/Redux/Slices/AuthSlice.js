@@ -44,7 +44,9 @@ export const login = createAsyncThunk("/auth/login", async (data) => {
 
 export const logout = createAsyncThunk("/auth/logout", async () => {
     try {
-        const res = axiosInstance.post("user/logout");
+        const res = axiosInstance.get("user/logout");
+                console.log("Logout response:", res);
+
         toast.promise(res, {
             loading: "Wait! logout in progress...",
             success: (data) => {
@@ -54,9 +56,35 @@ export const logout = createAsyncThunk("/auth/logout", async () => {
         });
         return (await res).data;
     } catch(error) {
+                console.error("Logout error:", error);
+
         toast.error(error?.response?.data?.message);
     }
 });
+
+
+// export const logout = createAsyncThunk("/auth/logout", async () => {
+//     try {
+//         const res = await axiosInstance.post("user/logout");
+
+//         // Check and log the response structure
+//         console.log("Logout response:", res);
+
+//         // Show a toast for success or fallback message
+//         toast.success(res?.data?.message || "Logout successful");
+
+//         return res.data; // Ensure correct data is returned
+//     } catch (error) {
+//         // Log the error for better debugging
+//         console.error("Logout error:", error);
+
+//         // Show a toast for the error with a fallback message
+//         toast.error(error?.response?.data?.message || "Failed to log out");
+
+//         throw error; // Re-throw the error if needed for further handling
+//     }
+// });
+
 
 const authSlice=createSlice({
     name:"auth",
