@@ -2,10 +2,13 @@ import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import toast from "react-hot-toast";
 
 import axiosInstance from "../../Helpers/axiosInstance"
+
+
 const initialState ={
     isLoggedIn: localStorage.getItem('isLoggedIn') || false,
     role: localStorage.getItem('role') || "",
-    data: JSON.parse(localStorage.getItem('data')) || {}
+    // data: localStorage.getItem('data') || {}
+    data: localStorage.getItem('data') != undefined ? JSON.parse(localStorage.getItem('data')) : {}
 };
 
 export const createAccount = createAsyncThunk("/auth/signup", async (data) => {
@@ -63,27 +66,32 @@ export const logout = createAsyncThunk("/auth/logout", async () => {
 });
 
 
-// export const logout = createAsyncThunk("/auth/logout", async () => {
-//     try {
-//         const res = await axiosInstance.post("user/logout");
+export const getUserData = createAsyncThunk("/user/details", async () => {
+    try {
+        const res = axiosInstance.get("user/me");
+        return (await res).data;
+    } catch(error) {
+        toast.error(error.message);
+    }
+})
 
-//         // Check and log the response structure
-//         console.log("Logout response:", res);
 
-//         // Show a toast for success or fallback message
-//         toast.success(res?.data?.message || "Logout successful");
 
-//         return res.data; // Ensure correct data is returned
-//     } catch (error) {
-//         // Log the error for better debugging
-//         console.error("Logout error:", error);
-
-//         // Show a toast for the error with a fallback message
-//         toast.error(error?.response?.data?.message || "Failed to log out");
-
-//         throw error; // Re-throw the error if needed for further handling
-//     }
-// });
+export const updateProfile = createAsyncThunk("/user/update/profile", async (data) => {
+    try {
+        const res = axiosInstance.put(`user/update/${data[0]}`, data[1]);
+        toast.promise(res, {
+            loading: "Wait! profile update in progress...",
+            success: (data) => {
+                return data?.data?.message;
+            },
+            error: "Failed to update profile"
+        });
+        return (await res).data;
+    } catch(error) {
+        toast.error(error?.response?.data?.message);
+    }
+})
 
 
 const authSlice=createSlice({
@@ -106,11 +114,22 @@ const authSlice=createSlice({
             state.isLoggedIn = false;
             state.role = "";
         })
+        .addCase(getUserData.fulfilled, (state, action) => {
+            if(!action?.payload?.user) return;
+            localStorage.setItem("data", JSON.stringify(action?.payload?.user));
+            localStorage.setItem("isLoggedIn", true);
+            localStorage.setItem("role", action?.payload?.user?.role);
+            state.isLoggedIn = true;
+            state.data = action?.payload?.user;
+            state.role = action?.payload?.user?.role
+        });
     }
 });
 
 // export const {}= authSlice.actions;
 export default authSlice.reducer;
+
+
 
 
 
