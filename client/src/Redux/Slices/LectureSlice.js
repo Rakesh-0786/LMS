@@ -43,18 +43,41 @@ export const addCourseLecture = createAsyncThunk("/course/lecture/add", async (d
 
 export const deleteCourseLecture = createAsyncThunk("/course/lecture/delete", async (data) => {
     try {
-
-        const response = axiosInstance.delete(`/courses?courseId=${data.courseId}&lectureId=${data.lectureId}`);
+        const response = axiosInstance.delete(`/courses/${data.courseId}/lecture/${data.lectureId}`);
+        
+        // Toast notifications for loading, success, and error
         toast.promise(response, {
-            loading: "deleting course lecture",
+            loading: "Deleting course lecture",
             success: "Lecture deleted successfully",
-            error: "Failed to delete the lectures"
+            error: "Failed to delete the lecture"
         });
+
         return (await response).data;
-    } catch(error) {
+    } catch (error) {
+        // Display error message in case of failure
         toast.error(error?.response?.data?.message);
     }
 });
+
+
+
+
+
+// error due to wrong api call:
+// export const deleteCourseLecture = createAsyncThunk("/course/lecture/delete", async (data) => {
+//     try {
+
+//         const response = axiosInstance.delete(`/courses?courseId=${data.courseId}&lectureId=${data.lectureId}`);
+//         toast.promise(response, {
+//             loading: "deleting course lecture",
+//             success: "Lecture deleted successfully",
+//             error: "Failed to delete the lectures"
+//         });
+//         return (await response).data;
+//     } catch(error) {
+//         toast.error(error?.response?.data?.message);
+//     }
+// });
 
 
 const lectureSlice = createSlice({

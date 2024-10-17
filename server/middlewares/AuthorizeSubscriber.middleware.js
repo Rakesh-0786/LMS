@@ -1,5 +1,6 @@
 import AppError from "../utils/error.util.js";
 import jwt from "jsonwebtoken";
+import userModel from "../models/user.model.js";
 
 const authorizeSubscriber = async (req, res, next) => {
   const { role, id } = req.user;
