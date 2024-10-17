@@ -10,8 +10,8 @@ function Checkout() {
     const navigate = useNavigate();
     const razorpayKey = useSelector((state) => state?.razorpay?.key);
     const subscription_id = useSelector((state) => state?.razorpay?.subscription_id);
-    const isPaymentVerified = useSelector((state) => state?.razorpay?.isPaymentVerified);
-    const userData = useSelector((state) => state?.auth?.data);
+    // const isPaymentVerified = useSelector((state) => state?.razorpay?.isPaymentVerified);
+    // const userData = useSelector((state) => state?.auth?.data);
     const paymentDetails = {
         razorpay_payment_id: "",
         razorpay_subscription_id: "",
@@ -36,8 +36,11 @@ function Checkout() {
                 paymentDetails.razorpay_payment_id = response.razorpay_payment_id;
                 paymentDetails.razorpay_signature = response.razorpay_signature;
                 paymentDetails.razorpay_subscription_id = response.razorpay_subscription_id;
+
                 toast.success("Payment successfull");
+                
                 const res = await dispatch(verifyUserPayment(paymentDetails));
+                console.log(res);
                 res?.payload?.success ? navigate("/checkout/success") : navigate("/checkout/fail");
             }
         }
