@@ -94,6 +94,40 @@ export const updateProfile = createAsyncThunk("/user/update/profile", async (dat
 })
 
 
+// export const changePassword = createAsyncThunk("/user/change-password", async (data, { rejectWithValue }) => {
+//     try {
+//         const res = await axiosInstance.post("/user/change-password", data);
+
+//         toast.promise(res, {
+//             loading: "Wait! changing password...",
+//             success: (res) => {
+//                 return res?.data?.message;
+//             },
+//             error: "Failed to change password"
+//         });
+
+//         return res.data;
+//     } catch (error) {
+//         // Ensure you are handling error response properly
+//         const errorMessage = error?.response?.data?.message || "Failed to change password";
+//         toast.error(errorMessage);
+//         return rejectWithValue(errorMessage);
+//     }
+// });
+
+
+export const changePassword = createAsyncThunk("/user/change-password", async (data, { rejectWithValue }) => {
+    try {
+        const res = await axiosInstance.post("/user/change-password", data);
+
+        return res.data;  // Return the response data on success
+    } catch (error) {
+        const errorMessage = error?.response?.data?.message || "Failed to change password";
+        return rejectWithValue(errorMessage);  // Return the error message on failure
+    }
+});
+
+
 const authSlice=createSlice({
     name:"auth",
     initialState,
@@ -122,7 +156,18 @@ const authSlice=createSlice({
             state.isLoggedIn = true;
             state.data = action?.payload?.user;
             state.role = action?.payload?.user?.role
+        })
+        .addCase(changePassword.fulfilled, (state, action) => {
+            toast.success("Password changed successfully");
+            localStorage.clear(); 
+            state.data = {};
+            state.isLoggedIn = false; 
+            state.role = ""; 
+        })
+        .addCase(changePassword.rejected, (state, action) => {
+            toast.error(action.payload);  // Show error toast
         });
+        
     }
 });
 

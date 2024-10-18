@@ -4,6 +4,7 @@ import cloudinary from "cloudinary";
 import fs from "fs/promises";
 import sendEmail from "../utils/sendEmail.js";
 import crypto from "crypto";
+import bcrypt from "bcryptjs";
 
 const cookieOptions= {
     maxAge:7*24*60*60*1000,  //7 days
@@ -13,7 +14,7 @@ const cookieOptions= {
 
 const register= async (req,res,next) =>{
     const{fullName, email, password}=req.body;
-    
+
     if(!fullName || !email || !password){
         return next(new AppError("All fields are required", 400));
     }
@@ -231,37 +232,90 @@ const forgotPassword = async (req, res, next) => {
   };
 
 
-//   change password
-  const changePassword = async (req, res, next) => {
-    const { oldPassword, newPassword } = req.body;
-    const { id } = req.user;
+// //   change password
+// const changePassword = async (req, res, next) => {
+//   const { oldPassword, newPassword } = req.body;
+//   const { id } = req.user;
+//   console.log("User ID:", id);
+//   console.log("Old Password from Request:", oldPassword);
+
+//   if (!oldPassword || !newPassword) {
+//       return next(new AppError("All fields are mandatory", 400));
+//   }
+
+//   const user = await User.findById(id).select("+password");
+
+//   if (!user) {
+//       return next(new AppError("User does not exist", 400));
+//   }
+
+//   const isPasswordValid = await user.comparePassword(oldPassword);
+//   console.log("Is Password Valid:", isPasswordValid);
+//   console.log("User Stored Password Hash:", user.password); // Log the stored password
+
+//   if (!isPasswordValid) {
+//       return next(new AppError("Invalid old Password", 400));
+//   }
+// //   if (!(bcrypt.compareSync(oldPassword, user.password))) {
+// //     return next(new AppError("Invalid Old Password", 400));
+// // }
+
+//   user.password = newPassword;
+//   await user.save();
+
+//   // user.password = undefined; // Remove the password field before sending the response
+
+//   res.status(200).json({
+//       success: true,
+//       message: "Password changed successfully!",
+//   });
+// };
+
+
+
+// Change password
+const changePassword = async (req, res, next) => {
+    try {
+      const { oldPassword, newPassword } = req.body;
+      const { id } = req.user;  // The authenticated user's ID
   
-    if (!oldPassword || !newPassword) {
-      return next(new AppError("All fields are mendatory", 400));
+      // Check if both fields are provided
+      if (!oldPassword || !newPassword) {
+        return next(new AppError("Both old and new passwords are required", 400));
+      }
+  
+      // Find the user by ID and include the password field
+      const user = await User.findById(id).select("+password");
+  
+      if (!user) {
+        return next(new AppError("User not found", 404));
+      }
+  
+      // Check if the old password is correct
+      const isPasswordValid = await user.comparePassword(oldPassword);
+  
+      if (!isPasswordValid) {
+        return next(new AppError("Incorrect old password", 400));
+      }
+  
+      // Ensure the new password is not the same as the old one
+      if (oldPassword === newPassword) {
+        return next(new AppError("New password cannot be the same as old password", 400));
+      }
+  
+      // Update the user's password
+      user.password = newPassword;
+      await user.save();  // This will trigger the pre-save middleware to hash the password
+  
+      res.status(200).json({
+        success: true,
+        message: "Password changed successfully!",
+      });
+    } catch (error) {
+      next(error);
     }
-  
-    const user = await User.findById(id).select("+password");
-  
-    if (!user) {
-      return next(new AppError("User does not exist", 400));
-    }
-  
-    const isPasswordValid = await user.comparePassword(oldPassword);
-  
-    if (!isPasswordValid) {
-      return next(new AppError("Invalid old Password", 400));
-    }
-    user.password = newPassword;
-  
-    await user.save();
-  
-    user.password = undefined;
-  
-    res.status(200).json({
-      success: true,
-      message: "password changed Successfully!",
-    });
   };
+  
 
 
 

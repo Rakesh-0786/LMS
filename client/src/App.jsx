@@ -19,6 +19,7 @@ import CheckoutFailure from './Pages/Payment/CheckoutFailure'
 import Displaylectures from './Pages/Dashboard/Displaylectures'
 import AddLecture from './Pages/Dashboard/Addlecture'
 import AdminDashboard from './Pages/Dashboard/AdminDashboard'
+import ChangePassword from './Pages/User/ChangePassword'
 
 function App() {
 
@@ -48,6 +49,8 @@ function App() {
       <Route element={<RequireAuth allowedRoles={["ADMIN", "USER"]}/>}>
       <Route path='/user/profile' element={<Profile />} />
       <Route path='/user/editprofile' element={<EditProfile />} />
+      <Route path='/changepassword' element={<ChangePassword />} />
+
       <Route path='/checkout' element={<Checkout />} />
       <Route path='/checkout/success' element={<CheckoutSuccess />} />
       <Route path='/checkout/fail' element={<CheckoutFailure />} />
