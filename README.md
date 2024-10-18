@@ -1,8 +1,10 @@
+# 🍳EduSphere
 
- # 🍳EduSphere
+## Description
 
-A full-stack, dynamic, and responsive Learning Management  platform , that i have build while learning full stack development. In this project i have build from scratch lots of feature like authentication, user management, course management, lecture management, lecture dashboard & admin dashboard and more...
+A full-stack, dynamic, and responsive Learning Management  platform , this is a lms project, that i have build while learning full stack development. In this project i have build from scratch lots of feature like authentication, user management, course management, lecture management, lecture dashboard & admin dashboard and more...
 
+![EduSphere](https://res.cloudinary.com/dwjgftbys/image/upload/v1729284196/EduSphere/upqoyegxjya3ev7mugrb.png)
 
 ## 📂 Project Structure
 
