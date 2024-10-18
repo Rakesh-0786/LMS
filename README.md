@@ -1,5 +1,5 @@
 
-# 🚍 Swift-Track
+ # 🍳EduSphere
 
 A full-stack, dynamic, and responsive Learning Management  platform , that i have build while learning full stack development. In this project i have build from scratch lots of feature like authentication, user management, course management, lecture management, lecture dashboard & admin dashboard and more...
 
@@ -147,71 +147,35 @@ LMS-Project/
 
 ---
 
+## Getting Started
 
+Follow these steps to set up the project on your local machine:
 
-## 🚀 Getting Started
-
-1. **Clone the repository**:
-   ```bash
-   git clone https://github.com/Rakesh-0786/_EduSphere.git
+1. Clone the repository:
    ```
-   
-2. **Navigate to the project directory**:
-   ```bash
-   cd EduSphere
+   git clone https://github.com/gulshan07dev/lms-mern-project.git
+   cd LMS
    ```
 
-3. **Install the dependencies**:
-   ```bash
-   npm install
-   cd client
-   npm install
-   ```
+2. Set up the backend:
+   - Navigate to the `backend` folder.
+   - Install dependencies: `npm install`
+   - Set up environment variables: Create a `.env` file based on `.env.example.js` file.
+   - Start the backend server: `npm start`
 
-4. **Set up environment variables**:
-   Create a `.env` file in the root directory and add the following variables:
-   ```bash
-    NODE_ENV=development
+3. Set up the frontend:
+   - Navigate to the client folder: `cd client`
+   - Install dependencies: `npm install`
+   - Set up environment variables: Create a `.env` file based on `.env.example.js` file.
+   - Start the client development server: `npm run dev`
 
-PORT=5000
+4. Access the application:
+   - Open your browser and visit: `http://localhost:5173`
 
-MONGO_URI="Provide Your MONGO_URl"
+---
 
-JWT_SECRET=<YOUR JWT_SECRET>
-JWT_EXPIRY=<YOUR JWT_EXPIRY>
-CLOUDINARY_CLOUD_NAME=<CLOUDINARY_NAME>
-CLOUDINARY_API_KEY=<CLOUDINARY_API_KEY>
-CLOUDINARY_API_SECRET=<CLOUDINARY_API_SECRET>
-SMTP_HOST=<YOUR SMTP_HOST>
-SMTP_PORT=<YOUR SMTP_PORT>
-SMTP_USERNAME=<YOUR SMTP_USERNAME>
-SMTP_PASSWORD=<YOUR SMTP_PASSWORD>
-SMTP_FROM_EMAIL=<YOUR SMTP_FROM_EMAIL>
-RAZORPAY_KEY_ID=<YOUR RAZORPAY_KEY_ID>
-RAZORPAY_SECRET=<YOUR RAZORPAY_SECRET>
-RAZORPAY_PLAN_ID=<YOUR RAZORPAY_PLAN_ID>
-FRONTEND_URL=<YOUR FRONTEND_URL>
-CONTACT_US_EMAIL=<YOUR CONTACT_US_EMAIL>
 
-   ```
 
-5. **Start the development server**:
-   - For the backend:
-     ```bash
-     npm run server
-     ```
-   - For the frontend:
-     ```bash
-     cd client
-     npm start
-     ```
-
-6. Access the application:
-   - Open your browser and visit: `http://localhost:5173/`
-
-## ✨ Demo
-
-You can check out the deployed version of the app [here]().
 
 
 
