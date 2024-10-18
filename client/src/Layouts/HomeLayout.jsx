@@ -3,10 +3,10 @@ import { FiMenu } from "react-icons/fi";
 import { useDispatch, useSelector } from 'react-redux';
 import { AiFillCloseCircle } from "react-icons/ai";
 import { Link, useNavigate } from "react-router-dom";
-import Footer from "../components/Footer";
+import Footer from "../components/Footer"; // Assuming Footer is in the components folder
 import { logout } from "../Redux/Slices/AuthSlice";
 
-function HomeLayout({ children }) {
+function HomeLayout({ children, hideFooter }) {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -77,7 +77,6 @@ function HomeLayout({ children }) {
                                 <Link to='/course/create'>Create new course</Link>
                             </li>
                         )}
-
                         <li>
                             <Link to="/courses">All Courses</Link>
                         </li>
@@ -93,7 +92,7 @@ function HomeLayout({ children }) {
                                     <button className="btn-primary px-4 py-1 font-semibold rounded-md w-full bg-blue-600 hover:bg-blue-700 transition-all">
                                         <Link to='/login'>Login</Link>
                                     </button>
-                                    <button className="btn-secondary px-4 py-1 font-semibond rounded-md w-full bg-yellow-400 hover:bg-yellow-600 transition-all ml-2">
+                                    <button className="btn-secondary px-4 py-1 font-semibold rounded-md w-full bg-yellow-400 hover:bg-yellow-600 transition-all ml-2">
                                         <Link to='/signup'>Signup</Link>
                                     </button>
                                 </div>
@@ -116,11 +115,12 @@ function HomeLayout({ children }) {
                 </div>
             </div>
             {children}
-            <Footer />
+            {!hideFooter && <Footer />} {/* Conditionally render Footer */}
         </div>
     );
 }
 
 export default HomeLayout;
+
 
 
