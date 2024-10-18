@@ -153,8 +153,8 @@ Follow these steps to set up the project on your local machine:
 
 1. Clone the repository:
    ```
-   git clone https://github.com/gulshan07dev/lms-mern-project.git
-   cd LMS
+   git clone https://github.com/Rakesh-0786/_EduSphere.git
+   cd EduSphere
    ```
 
 2. Set up the backend:
@@ -166,11 +166,10 @@ Follow these steps to set up the project on your local machine:
 3. Set up the frontend:
    - Navigate to the client folder: `cd client`
    - Install dependencies: `npm install`
-   - Set up environment variables: Create a `.env` file based on `.env.example.js` file.
    - Start the client development server: `npm run dev`
 
 4. Access the application:
-   - Open your browser and visit: `http://localhost:5173`
+   - Open your browser and visit: `http://localhost:5173/`
 
 ---
 
