@@ -17,9 +17,13 @@ yarn-debug.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Temporary files
+*.tmp
+*.temp
+*.local
+
 # Editor directories and files
-.vscode/*
-!.vscode/extensions.json
+.vscode/
 .idea/
 .DS_Store
 *.suo
@@ -28,5 +32,7 @@ lerna-debug.log*
 *.sln
 *.swp
 
-# Misc
-*.local
+# Miscellaneous
+coverage/
+*.tgz
+*.zip
